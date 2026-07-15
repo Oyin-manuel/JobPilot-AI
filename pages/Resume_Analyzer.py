@@ -1,4 +1,4 @@
-import pandas as pd
+from utils.gemini import analyze_resume
 import streamlit as st
 import pymupdf as fitz  # PyMuPDF
 def extract_text_from_pdf(uploaded_file):
@@ -24,3 +24,10 @@ if afile is not None:
     st.write("Successfully uploaded:", afile.name)
     resume_text = extract_text_from_pdf(afile)
     st.text_area("Extracted Resume Text", resume_text, height=300)
+    analysis = None
+
+    with st.spinner("Analyzing your resume..."):
+        analysis = analyze_resume(resume_text)
+
+        st.subheader("Resume Analysis")
+        st.markdown(analysis)   
