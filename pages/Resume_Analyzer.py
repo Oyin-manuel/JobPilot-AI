@@ -1,51 +1,51 @@
 from utils.gemini import analyze_resume
+from utils.pdf import extract_text_from_pdf
 import streamlit as st
-import pymupdf as fitz  # PyMuPDF
-def extract_text_from_pdf(uploaded_file):
-     pdf_bytes = uploaded_file.getvalue()
-     doc = fitz.open(stream = pdf_bytes, filetype = "pdf")
-     
-     texts = []
-     
-     for page in doc:
-        text = page.get_text()
-        texts.append(text)
-        
-     full_text = "\n".join(texts)
-     
-     return full_text
- 
- 
- #
+
 st.title("Resume Analyzer")
-afile = st.file_uploader("Upload your resume (PDF)", type=["pdf"])
+
+afile = st.file_uploader(
+    "Upload your resume (PDF)",
+    type=["pdf"]
+)
 
 if afile is not None:
-    st.write("Successfully uploaded:", afile.name)
+
+    st.success(f"Uploaded: {afile.name}")
+
     resume_text = extract_text_from_pdf(afile)
+
     with st.expander("📄 View Extracted Resume Text"):
         st.text_area(
-        "Extracted Text",
-        resume_text,
-        height=300
-    )  
-    
-if st.button("🔍 Analyze Resume"):
+            "Extracted Text",
+            resume_text,
+            height=300
+        )
 
-    if not resume_text.strip():
-        st.error("No text could be extracted from this PDF.")
-    else:
-        try:
-            with st.spinner("Analyzing your resume..."):
+    if st.button("🔍 Analyze Resume"):
 
-                analysis = analyze_resume(resume_text)
+        if not resume_text.strip():
 
-            st.success("Analysis completed successfully!")
+            st.error("No text could be extracted from this PDF.")
 
-            st.subheader("📄 Resume Analysis")
-            st.markdown(analysis)
+        else:
 
-        except Exception:
-            st.error(
-                "Unable to analyze the resume at the moment. Please try again in a few minutes."
-            )
+            try:
+                with st.spinner("Analyzing your resume..."):
+                    analysis = analyze_resume(resume_text)
+
+                st.subheader("Resume Analysis")
+                st.markdown(analysis)
+                st.download_button(
+        label="📥 Download Analysis",
+                    data=analysis,
+                    file_name="resume_analysis.txt",
+                    mime="text/plain"
+                )
+            except Exception as e:
+                if "503" in str(e):
+                    st.warning(
+                        "⚠️ The AI service is currently experiencing high demand. Please try again in a few minutes."
+                    )
+                else:
+                    st.error(f"An unexpected error occurred:\n\n{e}")

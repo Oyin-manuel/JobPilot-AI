@@ -3,59 +3,142 @@ from google import genai
 from dotenv import load_dotenv
 load_dotenv()
 
+print("API Loaded:", os.getenv("GEMINI_API_KEY") is not None)
 client = genai.Client(
-    api_key=os.getenv("AQ.Ab8RN6J5TtWlchMCCVTP73JuoGAUBu6W1eKWwvnn7eY78XeXJw")
+    api_key=os.getenv("GEMINI_API_KEY")
 )
 
 def analyze_resume(resume_text):
 
     prompt = f"""
+    You are an expert ATS Resume Reviewer, Senior Recruiter, and Career Coach with over 15 years of experience hiring candidates across technology, business, finance, engineering, and data roles.
 
-You are an expert resume reviewer, career coach, and ATS (Applicant Tracking System) specialist.
+Your task is to analyze the resume below as if you were reviewing it for a real job application.
 
-Analyze the resume below and provide a professional evaluation.
+Evaluate the resume using the following scoring rubric:
 
-Score the resume out of 100 based on:
-- Resume formatting and readability
-- Professional summary
-- Relevant technical and soft skills
-- Work experience
-- Projects and achievements
-- Education and certifications
-- ATS compatibility
-- Overall suitability for professional job applications
+- Formatting & Readability (15)
+- Professional Summary (10)
+- Technical & Soft Skills (10)
+- Work Experience (20)
+- Projects & Achievements (15)
+- Education & Certifications (10)
+- ATS Compatibility (10)
+- Grammar & Professionalism (10)
 
-Provide your response using the following format:
+Total Score = 100
 
-## Resume Score
-Provide a score out of 100 and briefly explain why.
+Return your analysis using EXACTLY this structure:
 
-## Strengths
+# Overall Resume Score
+Give a score out of 100 with a short explanation.
+
+# ATS Compatibility Score
+Score out of 100 and explain how ATS-friendly the resume is.
+
+# Section Scores
+
+Formatting:
+Professional Summary:
+Skills:
+Experience:
+Projects:
+Education:
+Grammar:
+
+# Recruiter's First Impression
+
+Write 2–3 sentences describing the first impression a recruiter would have after reading this resume.
+
+# Top Strengths
+
 List the strongest aspects of the resume.
 
-## Weaknesses
-Identify areas that reduce the resume's effectiveness.
+# Weaknesses
 
-## Missing Skills
-Mention important skills, technologies, or certifications that could improve the candidate's chances.
+Identify the biggest weaknesses.
 
-## Suggested Improvements
-Provide clear, practical recommendations for improving the resume.
+# Missing Keywords
 
-## Recommended Job Roles
-Suggest 5 job roles that best match the candidate's skills and experience.
+Mention important keywords, tools, certifications, or technologies that would improve the resume.
 
-Here is the resume:
+# ATS Issues
+
+Point out formatting or structural issues that could reduce ATS performance.
+
+# Bullet Point Improvements
+
+Rewrite 3 weak resume bullet points into stronger, achievement-oriented bullet points with measurable impact where possible.
+
+# Priority Improvements
+
+List the top 5 improvements in order of importance.
+
+# Recommended Job Roles
+
+Recommend 5 suitable job roles.
+
+For each role include:
+
+- Match Percentage
+- Reason why it matches
+
+Example:
+
+Data Analyst — 92%
+Reason...
+
+# Final Verdict
+
+Conclude with a paragraph explaining whether the resume is ready for applications or what should be improved first.
+
+Resume:
 
 {resume_text}
-
-    """
+"""
 
     try:
         response = client.models.generate_content(
             model="gemini-3.5-flash",
             contents=prompt
         )
+        return response.text
+
+    except Exception as e:
+        return f"Error: {e}"
+
+
+def generate_cover_letter(resume_text, job_description):
+
+    prompt = f"""
+You are an experienced recruiter and professional career coach.
+
+Using ONLY the information provided in the resume and the job description, write a tailored cover letter.
+
+Requirements:
+
+- Use a professional business letter format.
+- Write a compelling opening paragraph.
+- Clearly connect the applicant's skills and experience to the job requirements.
+- Do not invent qualifications or work experience.
+- Keep the cover letter between 300 and 450 words.
+- Use a confident but natural tone.
+- Avoid generic AI phrases.
+- End with a professional closing paragraph.
+
+Resume:
+{resume_text}
+
+Job Description:
+{job_description}
+"""
+
+    try:
+        response = client.models.generate_content(
+            model="gemini-3.5-flash",
+            contents=prompt
+        )
+
         return response.text
 
     except Exception as e:
