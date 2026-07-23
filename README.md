@@ -1,21 +1,14 @@
-# 🚀 JobPilot AI
+# 🚀 JobPilot AI — Your AI Career Assistant
 
-> An AI-powered career assistant that helps job seekers optimize their resumes, evaluate job fit, and generate tailored cover letters using Google's Gemini AI.
-
-![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)
-![Streamlit](https://img.shields.io/badge/Streamlit-App-red?logo=streamlit)
-![Gemini](https://img.shields.io/badge/Google-Gemini%203.6%20Flash-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
+An AI-powered career assistant that helps job seekers optimize their resumes, evaluate job fit, and generate tailored cover letters using Google's Gemini AI.
 
 ---
 
-## 📌 Overview
+## 🌟 Overview
 
-JobPilot AI is a modern AI-powered career assistant designed to simplify the job application process.
+JobPilot AI simplifies the job application process by combining AI-powered resume analysis, job matching, and cover letter generation into one easy-to-use application.
 
-Instead of manually reviewing resumes, comparing job descriptions, and writing cover letters, JobPilot AI leverages Google's Gemini AI to provide intelligent, personalized career assistance within seconds.
-
-Whether you're applying for internships, graduate roles, or full-time positions, JobPilot AI helps you present yourself as a stronger candidate.
+Whether you're applying for internships, graduate positions, or full-time roles, JobPilot AI helps you improve your application before you hit **Submit**.
 
 ---
 
@@ -31,7 +24,9 @@ Analyze your resume like an experienced recruiter.
 
 ✔ Recruiter's First Impression
 
-✔ Resume Strengths & Weaknesses
+✔ Resume Strengths
+
+✔ Resume Weaknesses
 
 ✔ Missing Keywords
 
@@ -57,25 +52,25 @@ Compare your resume against any job description.
 
 ✔ Missing Keywords
 
-✔ Hiring Recommendation
-
 ✔ Resume Improvement Suggestions
+
+✔ Hiring Recommendation
 
 ---
 
 ## ✍ AI Cover Letter Generator
 
-Generate personalized cover letters in seconds.
+Generate professional, tailored cover letters instantly.
 
-✔ Tailored to each job description
+✔ Personalized for every job
 
-✔ Professional business format
+✔ Professional formatting
 
-✔ AI-powered writing
+✔ AI-generated content
 
-✔ TXT Export
+✔ TXT Download
 
-✔ PDF Export
+✔ PDF Download
 
 ---
 
@@ -83,29 +78,35 @@ Generate personalized cover letters in seconds.
 
 ## 🏠 Home Page
 
-> *(Insert screenshot here)*
+![Home](assets/home.png)
 
 ---
 
 ## 📄 Resume Analyzer
 
-> *(Insert screenshot here)*
+Receive detailed ATS analysis, recruiter feedback, strengths, weaknesses, and improvement recommendations.
+
+![Resume Analyzer](assets/analyzer.png)
 
 ---
 
 ## 🎯 Job Matcher
 
-> *(Insert screenshot here)*
+Compare your resume with any job description and discover missing skills, keywords, ATS compatibility, and your overall match score.
+
+![Job Matcher](assets/matcher.png)
 
 ---
 
 ## ✍ Cover Letter Generator
 
-> *(Insert screenshot here)*
+Generate professional AI-powered cover letters tailored specifically to each job application.
+
+![Cover Letter Generator](assets/coverletter.png)
 
 ---
 
-# 🛠 Tech Stack
+# 🛠 Built With
 
 ### Frontend
 
@@ -115,7 +116,7 @@ Generate personalized cover letters in seconds.
 
 - Python
 
-### AI
+### Artificial Intelligence
 
 - Google Gemini 3.6 Flash
 
@@ -132,11 +133,18 @@ Generate personalized cover letters in seconds.
 
 # 📂 Project Structure
 
-```
+```text
 JobPilot-AI/
 
-│
 ├── Home.py
+├── README.md
+├── requirements.txt
+├── .env.example
+├── assets/
+│   ├── home.png
+│   ├── analyzer.png
+│   ├── matcher.png
+│   └── coverletter.png
 │
 ├── pages/
 │   ├── Resume Analyzer.py
@@ -146,14 +154,6 @@ JobPilot-AI/
 ├── utils/
 │   ├── gemini.py
 │   └── pdf.py
-│
-├── assets/
-│
-├── requirements.txt
-│
-├── .env.example
-│
-└── README.md
 ```
 
 ---
@@ -170,21 +170,19 @@ cd JobPilot-AI
 
 Create a virtual environment
 
-```bash
-python -m venv .venv
-```
-
-Activate the environment
-
 ### Windows
 
 ```bash
+python -m venv .venv
+
 .venv\Scripts\activate
 ```
 
 ### macOS/Linux
 
 ```bash
+python3 -m venv .venv
+
 source .venv/bin/activate
 ```
 
@@ -196,8 +194,8 @@ pip install -r requirements.txt
 
 Create a `.env` file
 
-```
-GEMINI_API_KEY=YOUR_API_KEY
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 Run the application
@@ -208,13 +206,13 @@ streamlit run Home.py
 
 ---
 
-# 💡 Future Roadmap
+# 💡 Future Improvements
 
 - 🎤 AI Interview Preparation
 
-- 📈 Resume Improvement Tracker
-
 - 📊 Resume Analytics Dashboard
+
+- 📈 Resume Improvement Tracker
 
 - 💼 AI Job Search Assistant
 
@@ -222,15 +220,15 @@ streamlit run Home.py
 
 - 🔗 LinkedIn Profile Analyzer
 
-- 🌐 Multi-language Support
+- 🌍 Multi-language Support
 
 ---
 
 # 🤝 Contributing
 
-Contributions, feature requests, and bug reports are welcome.
+Contributions are welcome!
 
-Feel free to fork the repository and submit a pull request.
+Feel free to fork this repository, improve the project, and submit a pull request.
 
 ---
 
@@ -240,7 +238,7 @@ Feel free to fork the repository and submit a pull request.
 
 Electronics Engineering Student
 
-Aspiring Data Scientist & AI Developer
+AI & Data Science Enthusiast
 
 GitHub
 
@@ -248,18 +246,18 @@ https://github.com/Oyin-manuel
 
 LinkedIn
 
-*(Add your LinkedIn profile here)*
+*(Add your LinkedIn profile here.)*
 
 ---
 
 # ⭐ Support
 
-If you found this project useful, please consider giving it a ⭐ on GitHub.
+If you found this project useful, consider giving it a ⭐ on GitHub.
 
-It helps others discover the project and motivates future development.
+Your support helps others discover the project and motivates future development.
 
 ---
 
-## 📜 License
+# 📜 License
 
 This project is licensed under the MIT License.
