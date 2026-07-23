@@ -1,96 +1,83 @@
 import os
+import json
 from google import genai
 from dotenv import load_dotenv
+
 load_dotenv()
 
 print("API Loaded:", os.getenv("GEMINI_API_KEY") is not None)
+
 client = genai.Client(
     api_key=os.getenv("GEMINI_API_KEY")
 )
 
+
+# ==========================
+# Resume Analyzer
+# ==========================
+
 def analyze_resume(resume_text):
 
     prompt = f"""
-    You are an expert ATS Resume Reviewer, Senior Recruiter, and Career Coach with over 15 years of experience hiring candidates across technology, business, finance, engineering, and data roles.
+You are an expert ATS Resume Reviewer and Senior Recruiter.
 
-Your task is to analyze the resume below as if you were reviewing it for a real job application.
+Analyze the resume below.
 
-Evaluate the resume using the following scoring rubric:
+Return ONLY valid JSON.
 
-- Formatting & Readability (15)
-- Professional Summary (10)
-- Technical & Soft Skills (10)
-- Work Experience (20)
-- Projects & Achievements (15)
-- Education & Certifications (10)
-- ATS Compatibility (10)
-- Grammar & Professionalism (10)
+Do NOT wrap the response inside markdown.
+Do NOT include ```json.
 
-Total Score = 100
+Use this exact schema:
 
-Return your analysis using EXACTLY this structure:
+{{
+  "overall_score": 0,
+  "overall_feedback": "",
 
-# Overall Resume Score
-Give a score out of 100 with a short explanation.
+  "ats_score": 0,
+  "ats_feedback": "",
 
-# ATS Compatibility Score
-Score out of 100 and explain how ATS-friendly the resume is.
+  "recruiter_impression": "",
 
-# Section Scores
+  "strengths": [
+    "",
+    "",
+    ""
+  ],
 
-Formatting:
-Professional Summary:
-Skills:
-Experience:
-Projects:
-Education:
-Grammar:
+  "weaknesses": [
+    "",
+    "",
+    ""
+  ],
 
-# Recruiter's First Impression
+  "missing_keywords": [
+    "",
+    "",
+    ""
+  ],
 
-Write 2–3 sentences describing the first impression a recruiter would have after reading this resume.
+  "ats_issues": [
+    "",
+    ""
+  ],
 
-# Top Strengths
+  "priority_improvements": [
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
 
-List the strongest aspects of the resume.
-
-# Weaknesses
-
-Identify the biggest weaknesses.
-
-# Missing Keywords
-
-Mention important keywords, tools, certifications, or technologies that would improve the resume.
-
-# ATS Issues
-
-Point out formatting or structural issues that could reduce ATS performance.
-
-# Bullet Point Improvements
-
-Rewrite 3 weak resume bullet points into stronger, achievement-oriented bullet points with measurable impact where possible.
-
-# Priority Improvements
-
-List the top 5 improvements in order of importance.
-
-# Recommended Job Roles
-
-Recommend 5 suitable job roles.
-
-For each role include:
-
-- Match Percentage
-- Reason why it matches
-
-Example:
-
-Data Analyst — 92%
-Reason...
-
-# Final Verdict
-
-Conclude with a paragraph explaining whether the resume is ready for applications or what should be improved first.
+  "recommended_roles": [
+    {{
+      "role": "",
+      "match": 0,
+      "reason": ""
+    }}
+  ]
+}}
 
 Resume:
 
@@ -98,15 +85,29 @@ Resume:
 """
 
     try:
+
         response = client.models.generate_content(
-            model="gemini-3.5-flash",
+            model="gemini-3.6-flash",
             contents=prompt
         )
-        return response.text
+
+        text = response.text.strip()
+
+        if text.startswith("```json"):
+            text = text.replace("```json", "").replace("```", "").strip()
+
+        elif text.startswith("```"):
+            text = text.replace("```", "").strip()
+
+        return json.loads(text)
 
     except Exception as e:
-        return f"Error: {e}"
+        return {"error": str(e)}
 
+
+# ==========================
+# Cover Letter Generator
+# ==========================
 
 def generate_cover_letter(resume_text, job_description):
 
@@ -134,8 +135,9 @@ Job Description:
 """
 
     try:
+
         response = client.models.generate_content(
-            model="gemini-3.5-flash",
+            model="gemini-3.6-flash",
             contents=prompt
         )
 
@@ -143,3 +145,120 @@ Job Description:
 
     except Exception as e:
         return f"Error: {e}"
+
+
+# ==========================
+# Job Matcher
+# ==========================
+
+def match_resume_to_job(resume_text, job_description):
+
+    prompt = f"""
+You are an expert ATS recruiter, hiring manager, and career coach.
+
+Compare the candidate's resume against the job description.
+
+Return ONLY valid JSON.
+
+Do NOT wrap the response in markdown.
+Do NOT include ```json.
+
+Use this exact schema:
+
+{{
+    "overall_match_score": 0,
+    "overall_feedback": "",
+
+    "ats_score": 0,
+    "ats_feedback": "",
+
+    "matching_skills": [
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+
+    "missing_skills": [
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+
+    "missing_keywords": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+
+    "strengths": [
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+
+    "weaknesses": [
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+
+    "resume_improvements": [
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+
+    "hiring_recommendation": {{
+        "decision": "",
+        "reason": ""
+    }}
+}}
+
+Resume:
+
+{resume_text}
+
+Job Description:
+
+{job_description}
+"""
+
+    try:
+
+        response = client.models.generate_content(
+            model="gemini-3.6-flash",
+            contents=prompt
+        )
+
+        text = response.text.strip()
+
+        # Remove markdown code fences if Gemini adds them
+        if text.startswith("```json"):
+            text = text.replace("```json", "").replace("```", "").strip()
+
+        elif text.startswith("```"):
+            text = text.replace("```", "").strip()
+
+        return json.loads(text)
+
+    except Exception as e:
+        return {
+            "error": str(e)
+        }
