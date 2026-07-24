@@ -1,0 +1,11 @@
+* [33mb51435b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Merge remote changes and update README
+* [33m1a23b78[m Organize project structure and add assets
+* [33m0d90520[m Improve README and add project screenshots
+[31m|[m * [33md78e89e[m[33m ([m[1;31morigin/main[m[33m)[m Revise README for improved clarity and formatting
+[31m|[m * [33m381111b[m Revise README for improved clarity and organization
+[31m|[m * [33m4ce3e77[m Create README.md with project overview and setup
+[31m|[m[31m/[m  
+* [33mb07aafb[m[33m ([m[1;32mclean-main[m[33m)[m Redesign JobPilot AI UI and add PDF export
+* [33mb699911[m Add AI-powered Cover Letter Generator
+* [33ma182f10[m Remove Python cache files
+* [33m321fe2f[m Add resume analyzer and remove .env from repository
